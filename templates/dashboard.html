@@ -1,17 +1,160 @@
 {% extends "base.html" %}
 {% block title %}대시보드{% endblock %}
 {% block content %}
-<h2>대시보드</h2>
-<h3>등록된 상품</h3>
-<ul>
-  {% for product in products %}
-    <li>
-      <a href="{{ url_for('view_product', product_id=product.id) }}">{{ product.title }}</a>
-      - 가격: {{ product.price }}
-    </li>
-  {% endfor %}
-</ul>
-<p><a href="{{ url_for('new_product') }}">새 상품 등록</a></p>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">상품 목록</h2>
+    </div>
+    
+    <!-- 검색창 추가 -->
+    <div class="search-container mb-4">
+        <form action="{{ url_for('dashboard') }}" method="GET" class="d-flex">
+            <div class="input-group">
+                <input type="text" name="search" class="form-control" placeholder="상품명으로 검색" value="{{ search_query }}">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fas fa-search"></i> 검색
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-5">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 product-card">
+                {% if product.image_path %}
+                <div class="card-img-container">
+                    <img src="{{ url_for('static', filename=product.image_path) }}" class="card-img-top" alt="{{ product.title }}">
+                </div>
+                {% endif %}
+                {% if product.seller_id == user.id %}
+                <div class="delete-button-container">
+                    <form action="{{ url_for('delete_product', product_id=product.id) }}" method="POST">
+                        <button type="submit" class="btn btn-danger delete-btn" onclick="return confirm('정말로 이 상품을 삭제하시겠습니까?')">
+                            삭제
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title text-truncate">{{ product.title }}</h5>
+                    <p class="card-text text-primary fw-bold">{{ product.price|format_price }}원</p>
+                    <p class="card-text text-muted small">판매자: <a href="{{ url_for('profile', user_id=product.seller_id) }}" class="text-decoration-none">{{ product.seller_username }}</a></p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <a href="{{ url_for('view_product', product_id=product.id) }}" class="btn btn-outline-primary btn-sm w-100">상세보기</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .search-container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .input-group {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .form-control {
+        border-radius: 4px 0 0 4px;
+        border: 1px solid #ced4da;
+    }
+    .btn-outline-primary {
+        border-radius: 0 4px 4px 0;
+    }
+    .card {
+        transition: transform 0.2s;
+        border: none;
+        border-radius: 12px;
+        background-color: #ffffff;
+        position: relative;
+    }
+    .product-card {
+        background-color: #f8f9fa;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    }
+    .card-img-container {
+        height: 200px;
+        overflow: hidden;
+        border-radius: 12px 12px 0 0;
+        background-color: #ffffff;
+    }
+    .card-img-top {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .card-body {
+        padding: 1.25rem;
+        background-color: #ffffff;
+        border-radius: 0 0 12px 12px;
+    }
+    .card-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+    .card-text {
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+    .card-footer {
+        padding: 1rem;
+        background-color: #ffffff;
+    }
+    .delete-button-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+    }
+    .delete-btn {
+        width: 60px;
+        height: 30px;
+        padding: 0;
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        background-color: #dc3545;
+        border: none;
+    }
+    .delete-btn:hover {
+        background-color: #c82333;
+    }
+    body {
+        background-color: #f0f2f5;
+    }
+    .container {
+        background-color: transparent;
+        padding: 2rem;
+    }
+    .row {
+        margin: 0 -10px;
+    }
+    .col {
+        padding: 10px;
+    }
+    .new-product-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+</style>
+
+<!-- 새 상품 등록 버튼 -->
+<a href="{{ url_for('new_product') }}" class="btn btn-primary new-product-btn">
+    <i class="fas fa-plus"></i> 새 상품 등록
+</a>
 
 <h3>실시간 채팅</h3>
 <div id="chat">

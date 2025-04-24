@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}프로필 수정{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">프로필 수정</h2>
+                    <form method="POST">
+                        <div class="form-group mb-3">
+                            <label for="username">사용자명</label>
+                            <input type="text" class="form-control" id="username" value="{{ user.username }}" disabled>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="bio">소개</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="4" style="resize: none;">{{ user.bio or '' }}</textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('profile', user_id=user.id) }}" class="btn btn-secondary">취소</a>
+                            <button type="submit" class="btn btn-primary">저장</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,11 +1,48 @@
 {% extends "base.html" %}
-{% block title %}프로필{% endblock %}
+{% block title %}{{ user.username }}의 프로필{% endblock %}
 {% block content %}
-<h2>프로필 관리</h2>
-<p>사용자명: {{ user.username }}</p>
-<form method="post">
-  소개글: <br>
-  <textarea name="bio" rows="4" cols="50">{{ user.bio or '' }}</textarea><br>
-  <button type="submit">프로필 업데이트</button>
-</form>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">{{ user.username }}</h2>
+                    <hr>
+                    <h5 class="card-subtitle mb-3">소개</h5>
+                    <p class="card-text">{{ user.bio or '아직 작성된 소개가 없습니다.' }}</p>
+                    
+                    {% if session.get('user_id') == user.id %}
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">프로필 수정</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">판매 중인 상품</h5>
+                    <div class="row">
+                        {% for product in products %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                {% if product.image_path %}
+                                <img src="{{ url_for('static', filename=product.image_path) }}" class="card-img-top" alt="{{ product.title }}">
+                                {% else %}
+                                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <span class="text-muted">이미지 없음</span>
+                                </div>
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.title }}</h5>
+                                    <p class="card-text">{{ product.price }}원</p>
+                                    <a href="{{ url_for('view_product', product_id=product.id) }}" class="btn btn-outline-primary">상세보기</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

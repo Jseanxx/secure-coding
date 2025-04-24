@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ product.title }}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            {% if product.image_path %}
+            <img src="{{ url_for('static', filename=product.image_path) }}" class="img-fluid rounded" alt="{{ product.title }}">
+            {% else %}
+            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                <span class="text-muted">이미지 없음</span>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2>{{ product.title }}</h2>
+            <p class="text-muted">판매자: <a href="{{ url_for('profile', user_id=seller.id) }}" class="text-decoration-none">{{ seller.username }}</a></p>
+            <p class="h4">{{ product.price|format_price }}원</p>
+            <p class="mt-4">{{ product.description }}</p>
+            {% if session.get('user_id') == product.seller_id %}
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('edit_product', product_id=product.id) }}" class="btn btn-primary">수정하기</a>
+                <form action="{{ url_for('delete_product', product_id=product.id) }}" method="POST" class="delete-form">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('정말로 이 상품을 삭제하시겠습니까?')">삭제하기</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .delete-form {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+    }
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+</style>
+{% endblock %} 
