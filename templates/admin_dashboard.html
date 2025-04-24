@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}관리자 대시보드{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">관리자 대시보드</h2>
+    
+    <!-- 신고 목록 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>신고 목록</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>신고자</th>
+                            <th>대상자</th>
+                            <th>사유</th>
+                            <th>신고일시</th>
+                            <th>상태</th>
+                            <th>처리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for report in reports %}
+                        <tr>
+                            <td>{{ report.reporter_name }}</td>
+                            <td>{{ report.target_name }}</td>
+                            <td>{{ report.reason }}</td>
+                            <td>{{ report.created_at }}</td>
+                            <td>
+                                <span class="badge {% if report.status == 'pending' %}bg-warning{% elif report.status == 'resolved' %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ report.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <form action="{{ url_for('update_report_status') }}" method="POST" class="d-inline">
+                                    <input type="hidden" name="report_id" value="{{ report.id }}">
+                                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <option value="pending" {% if report.status == 'pending' %}selected{% endif %}>대기중</option>
+                                        <option value="resolved" {% if report.status == 'resolved' %}selected{% endif %}>해결됨</option>
+                                        <option value="rejected" {% if report.status == 'rejected' %}selected{% endif %}>거부됨</option>
+                                    </select>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 사용자 관리 -->
+    <div class="card">
+        <div class="card-header">
+            <h4>사용자 관리</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>사용자명</th>
+                            <th>상태</th>
+                            <th>정지 기간</th>
+                            <th>관리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <a href="{{ url_for('profile', user_id=user.id) }}" class="text-decoration-none">
+                                    {{ user.username }}
+                                </a>
+                                {% if user.is_admin %}
+                                <span class="badge bg-primary">관리자</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.ban_until %}
+                                    <span class="badge bg-danger">정지됨</span>
+                                {% else %}
+                                    <span class="badge bg-success">활동중</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.ban_until %}
+                                    {% if user.ban_until == '9999-12-31' %}
+                                        영구 정지
+                                    {% else %}
+                                        {{ user.ban_until }}
+                                    {% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not user.is_admin %}
+                                <form action="{{ url_for('ban_user') }}" method="POST" class="d-inline">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <select name="ban_days" class="form-select form-select-sm">
+                                        <option value="0">정지 해제</option>
+                                        <option value="7">7일 정지</option>
+                                        <option value="15">15일 정지</option>
+                                        <option value="30">30일 정지</option>
+                                        <option value="-1">영구 정지</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-danger">적용</button>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

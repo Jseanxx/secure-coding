@@ -27,19 +27,20 @@
                     <img src="{{ url_for('static', filename=product.image_path) }}" class="card-img-top" alt="{{ product.title }}">
                 </div>
                 {% endif %}
-                {% if product.seller_id == user.id %}
-                <div class="delete-button-container">
-                    <form action="{{ url_for('delete_product', product_id=product.id) }}" method="POST">
-                        <button type="submit" class="btn btn-danger delete-btn" onclick="return confirm('정말로 이 상품을 삭제하시겠습니까?')">
-                            삭제
-                        </button>
-                    </form>
-                </div>
-                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title text-truncate">{{ product.title }}</h5>
                     <p class="card-text text-primary fw-bold">{{ product.price|format_price }}원</p>
                     <p class="card-text text-muted small">판매자: <a href="{{ url_for('profile', user_id=product.seller_id) }}" class="text-decoration-none">{{ product.seller_username }}</a></p>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">판매자: {{ product.seller_username }}</span>
+                        {% if current_user.id == product.seller_id %}
+                        <form action="{{ url_for('delete_product', product_id=product.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                        </form>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="card-footer bg-transparent border-top-0">
                     <a href="{{ url_for('view_product', product_id=product.id) }}" class="btn btn-outline-primary btn-sm w-100">상세보기</a>
