@@ -1,17 +1,19 @@
 import sqlite3
 import uuid
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-from flask_socketio import SocketIO, send
+from flask import Flask, render_template, request, redirect, url_for, session, flash, g, send_from_directory
+from flask_socketio import SocketIO, send, emit
 from werkzeug.utils import secure_filename
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from datetime import datetime, timedelta
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///marketplace.db'
 DATABASE = 'market.db'
 socketio = SocketIO(app)
 
@@ -19,6 +21,17 @@ socketio = SocketIO(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# 날짜 포맷팅 필터 추가
+@app.template_filter('format_datetime')
+def format_datetime(value):
+    if value is None:
+        return ''
+    try:
+        dt = datetime.fromisoformat(value) if isinstance(value, str) else value
+        return dt.strftime('%Y-%m-%d %H:%M:%S')
+    except:
+        return value
 
 class User(UserMixin):
     def __init__(self, user_id, username, password, bio=None, is_admin=False, is_banned=False, ban_duration=0):
@@ -77,41 +90,68 @@ def init_db():
         # 사용자 테이블 생성
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS user (
-                id TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
                 email TEXT UNIQUE,
                 bio TEXT,
                 is_admin BOOLEAN DEFAULT 0,
                 is_banned BOOLEAN DEFAULT 0,
-                ban_duration INTEGER DEFAULT 0
+                ban_duration INTEGER DEFAULT 0,
+                banned_until DATETIME DEFAULT NULL
             )
         """)
         # 상품 테이블 생성
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS product (
-                id TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
-                description TEXT NOT NULL,
+                description TEXT,
                 price INTEGER NOT NULL,
-                seller_id TEXT NOT NULL,
+                seller_id INTEGER NOT NULL,
                 image_path TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (seller_id) REFERENCES user (id)
             )
         """)
         # 신고 테이블 생성
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS report (
-                id TEXT PRIMARY KEY,
-                user_id TEXT NOT NULL,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                reporter_id INTEGER NOT NULL,
+                reported_user_id INTEGER,
+                product_id INTEGER,
                 report_type TEXT NOT NULL,
                 content TEXT NOT NULL,
-                product_id TEXT,
                 status TEXT DEFAULT 'pending',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES user (id),
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (reporter_id) REFERENCES user (id),
+                FOREIGN KEY (reported_user_id) REFERENCES user (id),
                 FOREIGN KEY (product_id) REFERENCES product (id)
+            )
+        """)
+        # 채팅방 테이블 생성
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS chat_room (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user1_id INTEGER NOT NULL,
+                user2_id INTEGER NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user1_id) REFERENCES user (id),
+                FOREIGN KEY (user2_id) REFERENCES user (id),
+                UNIQUE(user1_id, user2_id)
+            )
+        """)
+        # 채팅 메시지 테이블 생성
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS chat_message (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                room_id INTEGER NOT NULL,
+                sender_id INTEGER NOT NULL,
+                content TEXT NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (room_id) REFERENCES chat_room (id),
+                FOREIGN KEY (sender_id) REFERENCES user (id)
             )
         """)
         db.commit()
@@ -258,7 +298,7 @@ def edit_profile():
         cursor.execute('SELECT * FROM user WHERE id = ?', (current_user.id,))
         user = cursor.fetchone()
         conn.close()
-        return render_template('edit_profile.html', user=user)
+        return render_template('profile.html', user=user)
     except Exception as e:
         flash(f'프로필 로드 중 오류가 발생했습니다: {str(e)}', 'error')
         return redirect(url_for('dashboard'))
@@ -457,10 +497,34 @@ def delete_product(product_id):
     return redirect(url_for('dashboard'))
 
 # 실시간 채팅: 클라이언트가 메시지를 보내면 전체 브로드캐스트
-@socketio.on('send_message')
-def handle_send_message_event(data):
-    data['message_id'] = str(uuid.uuid4())
-    send(data, broadcast=True)
+@socketio.on('join_room')
+def on_join(data):
+    room_id = data['room_id']
+    join_room(room_id)
+    emit('status', {'msg': f'{current_user.username}님이 입장했습니다.'}, room=room_id)
+
+@socketio.on('chat_message')
+def handle_message(data):
+    room_id = data['room_id']
+    content = data['content']
+    
+    # 메시지 저장
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        'INSERT INTO chat_message (room_id, sender_id, content) VALUES (?, ?, ?)',
+        (room_id, current_user.id, content)
+    )
+    conn.commit()
+    
+    # 메시지 전송
+    emit('new_message', {
+        'sender_id': current_user.id,
+        'content': content,
+        'created_at': datetime.now().isoformat()
+    }, room=room_id)
+    
+    conn.close()
 
 @app.route('/change_password', methods=['POST'])
 @login_required
@@ -719,6 +783,125 @@ def admin_delete_product():
         flash(f'오류가 발생했습니다: {str(e)}')
     
     return redirect(url_for('admin_dashboard'))
+
+@app.route('/chat')
+@login_required
+def chat_list():
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 사용자의 채팅방 목록 가져오기
+    cursor.execute('''
+        SELECT cr.id as room_id, 
+               CASE WHEN cr.user1_id = ? THEN u2.id ELSE u1.id END as other_user_id,
+               CASE WHEN cr.user1_id = ? THEN u2.username ELSE u1.username END as other_username,
+               cm.content as last_message,
+               cm.created_at
+        FROM chat_room cr
+        LEFT JOIN user u1 ON cr.user1_id = u1.id
+        LEFT JOIN user u2 ON cr.user2_id = u2.id
+        LEFT JOIN chat_message cm ON cm.id = (
+            SELECT id FROM chat_message 
+            WHERE room_id = cr.id 
+            ORDER BY created_at DESC 
+            LIMIT 1
+        )
+        WHERE cr.user1_id = ? OR cr.user2_id = ?
+        ORDER BY cm.created_at DESC
+    ''', (current_user.id, current_user.id, current_user.id, current_user.id))
+    
+    chats = []
+    for row in cursor.fetchall():
+        chats.append({
+            'room_id': row[0],
+            'other_user': {'id': row[1], 'username': row[2]},
+            'last_message': {'content': row[3], 'created_at': row[4]}
+        })
+    
+    conn.close()
+    return render_template('chat_list.html', chats=chats)
+
+@app.route('/chat/start/<string:user_id>')
+@login_required
+def start_chat(user_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 채팅 상대방 확인
+    cursor.execute('SELECT id, username FROM user WHERE id = ?', (user_id,))
+    other_user = cursor.fetchone()
+    if not other_user:
+        flash('존재하지 않는 사용자입니다.')
+        return redirect(url_for('dashboard'))
+    
+    # 채팅방 확인 또는 생성
+    cursor.execute('''
+        SELECT id FROM chat_room 
+        WHERE (user1_id = ? AND user2_id = ?) 
+           OR (user1_id = ? AND user2_id = ?)
+    ''', (current_user.id, user_id, user_id, current_user.id))
+    
+    room = cursor.fetchone()
+    if not room:
+        cursor.execute('''
+            INSERT INTO chat_room (user1_id, user2_id) 
+            VALUES (?, ?)
+        ''', (min(current_user.id, user_id), max(current_user.id, user_id)))
+        room_id = cursor.lastrowid
+        conn.commit()
+    else:
+        room_id = room[0]
+    
+    conn.close()
+    return redirect(url_for('chat_room', room_id=room_id))
+
+@app.route('/chat/room/<string:room_id>')
+@login_required
+def chat_room(room_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    
+    # 채팅방 확인
+    cursor.execute('''
+        SELECT cr.id, 
+               CASE WHEN cr.user1_id = ? THEN u2.id ELSE u1.id END as other_user_id,
+               CASE WHEN cr.user1_id = ? THEN u2.username ELSE u1.username END as other_username
+        FROM chat_room cr
+        LEFT JOIN user u1 ON cr.user1_id = u1.id
+        LEFT JOIN user u2 ON cr.user2_id = u2.id
+        WHERE cr.id = ? AND (cr.user1_id = ? OR cr.user2_id = ?)
+    ''', (current_user.id, current_user.id, room_id, current_user.id, current_user.id))
+    
+    room = cursor.fetchone()
+    if not room:
+        flash('존재하지 않는 채팅방입니다.')
+        return redirect(url_for('chat_list'))
+    
+    # 채팅 메시지 가져오기
+    cursor.execute('''
+        SELECT cm.*, u.username
+        FROM chat_message cm
+        JOIN user u ON cm.sender_id = u.id
+        WHERE cm.room_id = ?
+        ORDER BY cm.created_at ASC
+    ''', (room_id,))
+    
+    messages = []
+    for row in cursor.fetchall():
+        messages.append({
+            'id': row[0],
+            'room_id': row[1],
+            'sender_id': row[2],
+            'content': row[3],
+            'created_at': row[4],
+            'username': row[5]
+        })
+    
+    conn.close()
+    return render_template('chat_room.html', 
+                         room_id=room_id,
+                         other_user={'id': room[1], 'username': room[2]},
+                         messages=messages)
 
 if __name__ == '__main__':
     with app.app_context():

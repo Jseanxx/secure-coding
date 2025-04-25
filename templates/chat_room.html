@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}채팅방{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ other_user.username }}님과의 채팅</h5>
+                </div>
+                <div class="card-body" style="height: 400px; overflow-y: auto;" id="chat-messages">
+                    {% for message in messages %}
+                    <div class="message {% if message.sender_id == current_user.id %}text-end{% endif %} mb-3">
+                        <div class="message-content {% if message.sender_id == current_user.id %}bg-primary text-white{% else %}bg-light{% endif %} p-2 rounded">
+                            {{ message.content }}
+                        </div>
+                        <small class="text-muted">{{ message.created_at|format_datetime }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <form id="message-form" class="d-flex">
+                        <input type="text" class="form-control" id="message-input" placeholder="메시지를 입력하세요">
+                        <button type="submit" class="btn btn-primary ms-2">전송</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
+    const chatMessages = document.getElementById('chat-messages');
+    
+    // WebSocket 연결
+    const socket = io();
+    
+    // 채팅방 입장
+    socket.emit('join_room', { room_id: '{{ room_id }}' });
+    
+    // 메시지 전송
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        if (message) {
+            socket.emit('chat_message', {
+                room_id: '{{ room_id }}',
+                content: message
+            });
+            messageInput.value = '';
+        }
+    });
+    
+    // 새 메시지 수신
+    socket.on('new_message', function(data) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${data.sender_id === '{{ current_user.id }}' ? 'text-end' : ''} mb-3`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = `message-content ${data.sender_id === '{{ current_user.id }}' ? 'bg-primary text-white' : 'bg-light'} p-2 rounded`;
+        contentDiv.textContent = data.content;
+        
+        const timeSmall = document.createElement('small');
+        timeSmall.className = 'text-muted';
+        timeSmall.textContent = new Date(data.created_at).toLocaleString();
+        
+        messageDiv.appendChild(contentDiv);
+        messageDiv.appendChild(timeSmall);
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+
+    // 채팅방 입장 메시지 수신
+    socket.on('status', function(data) {
+        const statusDiv = document.createElement('div');
+        statusDiv.className = 'text-center text-muted mb-3';
+        statusDiv.textContent = data.msg;
+        chatMessages.appendChild(statusDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+});
+</script>
+{% endblock %} 

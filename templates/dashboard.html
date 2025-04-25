@@ -10,7 +10,7 @@
         </a>
         {% endif %}
     </div>
-    
+
     <!-- 검색창 추가 -->
     <div class="search-container mb-4">
         <form action="{{ url_for('dashboard') }}" method="GET" class="d-flex">
@@ -150,33 +150,4 @@
         padding: 10px;
     }
 </style>
-
-<h3>실시간 채팅</h3>
-<div id="chat">
-  <ul id="messages"></ul>
-  <input id="chat_input" type="text" placeholder="메시지를 입력하세요">
-  <button onclick="sendMessage()">전송</button>
-</div>
-
-<script type="text/javascript">
-  var socket = io();
-  socket.on('connect', function() {
-    console.log("채팅 서버에 연결됨");
-  });
-  socket.on('message', function(data) {
-    var messages = document.getElementById('messages');
-    var item = document.createElement('li');
-    item.textContent = data.username + ": " + data.message;
-    messages.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
-  });
-  function sendMessage() {
-    var input = document.getElementById('chat_input');
-    var message = input.value;
-    if (message) {
-      socket.emit('send_message', { 'username': "{{ current_user.username }}", 'message': message });
-      input.value = "";
-    }
-  }
-</script>
 {% endblock %}

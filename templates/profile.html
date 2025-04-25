@@ -5,14 +5,30 @@
     <div class="row">
         <div class="col-md-8 mx-auto">
             <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ user.username }}의 프로필</h5>
+                        {% if current_user.is_authenticated and current_user.id != user.id %}
+                        <a href="{{ url_for('start_chat', user_id=user.id) }}" class="btn btn-primary">
+                            <i class="fas fa-comments"></i> 1:1 채팅하기
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="card-body">
-                    <h2 class="card-title">{{ user.username }}</h2>
-                    <hr>
-                    <h5 class="card-subtitle mb-3">소개</h5>
-                    <p class="card-text">{{ user.bio or '아직 작성된 소개가 없습니다.' }}</p>
-                    
-                    {% if session.get('user_id') == user.id %}
-                    <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">프로필 수정</a>
+                    {% if user.id == current_user.id %}
+                    <form method="POST" action="{{ url_for('edit_profile') }}">
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">소개글</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3">{{ user.bio or '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </form>
+                    {% else %}
+                    <div class="mb-3">
+                        <h6>소개글</h6>
+                        <p>{{ user.bio or '소개글이 없습니다.' }}</p>
+                    </div>
                     {% endif %}
                 </div>
             </div>
