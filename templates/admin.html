@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>관리자 대시보드</h2>
+    
+    <!-- 관리자 계정 차단 해제 버튼 -->
+    <div class="mb-4">
+        <a href="{{ url_for('fix_admin_ban') }}" class="btn btn-warning">
+            관리자 계정 차단 해제
+        </a>
+    </div>
+    
+    <!-- 신고 관리 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>신고 관리</h3>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>신고 유형</th>
+                        <th>신고자</th>
+                        <th>상품 ID</th>
+                        <th>신고 내용</th>
+                        <th>상태</th>
+                        <th>신고일</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>{{ report.id }}</td>
+                        <td>{{ report.report_type }}</td>
+                        <td>{{ report.reporter_username }}</td>
+                        <td>{{ report.product_id if report.product_id else '-' }}</td>
+                        <td>{{ report.content }}</td>
+                        <td>
+                            <span class="badge badge-{{ 'warning' if report.status == 'pending' else 'success' if report.status == 'resolved' else 'danger' }}">
+                                {{ report.status }}
+                            </span>
+                        </td>
+                        <td>{{ report.created_at }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('update_report_status') }}" style="display: inline;">
+                                <input type="hidden" name="report_id" value="{{ report.id }}">
+                                <select name="status" class="form-control form-control-sm" onchange="this.form.submit()">
+                                    <option value="pending" {% if report.status == 'pending' %}selected{% endif %}>대기중</option>
+                                    <option value="resolved" {% if report.status == 'resolved' %}selected{% endif %}>해결됨</option>
+                                    <option value="rejected" {% if report.status == 'rejected' %}selected{% endif %}>거절됨</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 상품 관리 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>상품 관리</h3>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>제목</th>
+                        <th>판매자</th>
+                        <th>가격</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.title }}</td>
+                        <td>{{ product.seller_username }}</td>
+                        <td>{{ product.price }}원</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin_delete_product') }}" style="display: inline;">
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('정말로 이 상품을 삭제하시겠습니까?')">삭제</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 사용자 관리 -->
+    <div class="card">
+        <div class="card-header">
+            <h3>사용자 관리</h3>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>사용자명</th>
+                        <th>이메일</th>
+                        <th>상태</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.is_banned %}
+                            <span class="badge badge-danger">차단됨 ({{ user.ban_duration }}일)</span>
+                            {% else %}
+                            <span class="badge badge-success">정상</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.is_banned %}
+                            <form method="POST" action="{{ url_for('unban_user') }}" style="display: inline;">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <button type="submit" class="btn btn-success btn-sm">차단 해제</button>
+                            </form>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('ban_user') }}" style="display: inline;">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="number" name="days" value="7" min="1" max="30" class="form-control form-control-sm" style="width: 60px; display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">차단</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

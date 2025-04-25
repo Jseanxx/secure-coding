@@ -17,16 +17,15 @@
       padding: 0;
       color: #333;
     }
-    nav {
-      background-color: #fff;
-      padding: 20px;
-      border-bottom: 1px solid #e0e0e0;
+    .navbar {
+      background-color: #343a40 !important;
+      padding: 0.5rem 1rem;
     }
-    nav a {
-      text-decoration: none;
-      color: #555;
-      margin-right: 15px;
-      font-weight: 500;
+    .navbar-brand, .nav-link {
+      color: #fff !important;
+    }
+    .navbar-brand:hover, .nav-link:hover {
+      color: #f8f9fa !important;
     }
     .container {
       max-width: 800px;
@@ -89,33 +88,40 @@
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
+  <!-- 네비게이션 바 -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
       <a class="navbar-brand" href="{{ url_for('dashboard') }}">중고마켓</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- 왼쪽 메뉴 -->
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('dashboard') }}">대시보드</a>
+            <a class="nav-link" href="{{ url_for('dashboard') }}">홈</a>
           </li>
           {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('edit_profile') }}">프로필</a>
+            <a class="nav-link" href="{{ url_for('new_product') }}">상품 등록</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('report') }}">신고하기</a>
           </li>
           {% if current_user.is_admin %}
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">관리자페이지</a>
+            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">관리자 페이지</a>
           </li>
           {% endif %}
           {% endif %}
         </ul>
-        <ul class="navbar-nav">
+        
+        <!-- 오른쪽 메뉴 -->
+        <ul class="navbar-nav ms-auto">
           {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('my_profile') }}">프로필</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('logout') }}">로그아웃</a>
           </li>

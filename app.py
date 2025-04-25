@@ -21,18 +21,17 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 class User(UserMixin):
-    def __init__(self, user_id, username, password, bio=None, is_admin=False, ban_until=None):
+    def __init__(self, user_id, username, password, bio=None, is_admin=False, is_banned=False, ban_duration=0):
         self.id = user_id
         self.username = username
         self.password = password
         self.bio = bio
         self.is_admin = is_admin
-        self.ban_until = ban_until
+        self.is_banned = is_banned
+        self.ban_duration = ban_duration
 
     def is_banned(self):
-        if self.ban_until:
-            return datetime.now() < datetime.fromisoformat(self.ban_until)
-        return False
+        return self.is_banned
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -47,7 +46,8 @@ def load_user(user_id):
             user_data['password'], 
             user_data['bio'],
             bool(user_data['is_admin']),
-            user_data['ban_until']
+            bool(user_data['is_banned']),
+            user_data['ban_duration']
         )
     return None
 
@@ -74,15 +74,17 @@ def init_db():
     with app.app_context():
         db = get_db()
         cursor = db.cursor()
-        # 사용자 테이블 생성 (is_admin, ban_until 필드 추가)
+        # 사용자 테이블 생성
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS user (
                 id TEXT PRIMARY KEY,
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
+                email TEXT UNIQUE,
                 bio TEXT,
                 is_admin BOOLEAN DEFAULT 0,
-                ban_until TEXT
+                is_banned BOOLEAN DEFAULT 0,
+                ban_duration INTEGER DEFAULT 0
             )
         """)
         # 상품 테이블 생성
@@ -91,34 +93,28 @@ def init_db():
                 id TEXT PRIMARY KEY,
                 title TEXT NOT NULL,
                 description TEXT NOT NULL,
-                price TEXT NOT NULL,
+                price INTEGER NOT NULL,
                 seller_id TEXT NOT NULL,
-                image_path TEXT
+                image_path TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (seller_id) REFERENCES user (id)
             )
         """)
         # 신고 테이블 생성
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS report (
                 id TEXT PRIMARY KEY,
-                reporter_id TEXT NOT NULL,
-                target_id TEXT NOT NULL,
-                reason TEXT NOT NULL,
+                user_id TEXT NOT NULL,
+                report_type TEXT NOT NULL,
+                content TEXT NOT NULL,
+                product_id TEXT,
+                status TEXT DEFAULT 'pending',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                status TEXT DEFAULT 'pending'
+                FOREIGN KEY (user_id) REFERENCES user (id),
+                FOREIGN KEY (product_id) REFERENCES product (id)
             )
         """)
         db.commit()
-
-        # 관리자 계정 생성
-        cursor.execute("SELECT * FROM user WHERE username = 'admin'")
-        if not cursor.fetchone():
-            admin_id = str(uuid.uuid4())
-            hashed_password = generate_password_hash('1234')
-            cursor.execute(
-                "INSERT INTO user (id, username, password, is_admin) VALUES (?, ?, ?, ?)",
-                (admin_id, 'admin', hashed_password, 1)
-            )
-            db.commit()
 
 # 가격 포맷팅 필터 추가
 @app.template_filter('format_price')
@@ -168,14 +164,37 @@ def login():
         cursor.execute("SELECT * FROM user WHERE username = ?", (username,))
         user_data = cursor.fetchone()
         
-        if user_data and check_password_hash(user_data['password'], password):
-            user = User(user_data['id'], user_data['username'], user_data['password'], user_data['bio'], user_data['is_admin'], user_data['ban_until'])
-            login_user(user)
-            flash('로그인 성공!')
-            return redirect(url_for('dashboard'))
+        if user_data:
+            print(f"Found user: {user_data['username']}, is_admin: {user_data['is_admin']}, is_banned: {user_data['is_banned']}")
+            # 관리자 계정은 차단에서 예외 처리
+            if user_data['is_admin']:
+                if check_password_hash(user_data['password'], password):
+                    user = User(user_data['id'], user_data['username'], user_data['password'], 
+                              user_data['bio'], user_data['is_admin'], False, 0)  # 관리자는 항상 차단되지 않음
+                    login_user(user)
+                    flash('로그인 성공!')
+                    return redirect(url_for('dashboard'))
+                else:
+                    print("Password mismatch for admin")
+            else:
+                # 일반 사용자 차단 체크
+                if user_data['is_banned']:
+                    flash(f'이 계정은 차단되었습니다. 차단 기간: {user_data["ban_duration"]}일')
+                    return redirect(url_for('login'))
+                
+                if check_password_hash(user_data['password'], password):
+                    user = User(user_data['id'], user_data['username'], user_data['password'], 
+                              user_data['bio'], user_data['is_admin'], user_data['is_banned'], user_data['ban_duration'])
+                    login_user(user)
+                    flash('로그인 성공!')
+                    return redirect(url_for('dashboard'))
+                else:
+                    print("Password mismatch for regular user")
         else:
-            flash('아이디 또는 비밀번호가 올바르지 않습니다.')
-            return redirect(url_for('login'))
+            print(f"User not found: {username}")
+        
+        flash('아이디 또는 비밀번호가 올바르지 않습니다.')
+        return redirect(url_for('login'))
     return render_template('login.html')
 
 # 로그아웃
@@ -213,24 +232,36 @@ def dashboard():
     all_products = cursor.fetchall()
     return render_template('dashboard.html', 
                          products=all_products, 
-                         search_query=search_query,
-                         user=current_user)
+                         search_query=search_query)
 
 # 프로필 페이지: bio 업데이트 가능
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    db = get_db()
-    cursor = db.cursor()
     if request.method == 'POST':
         bio = request.form.get('bio', '')
-        cursor.execute("UPDATE user SET bio = ? WHERE id = ?", (bio, current_user.id))
-        db.commit()
-        flash('프로필이 업데이트되었습니다.')
-        return redirect(url_for('profile', user_id=current_user.id))
-    cursor.execute("SELECT * FROM user WHERE id = ?", (current_user.id,))
-    user = cursor.fetchone()
-    return render_template('edit_profile.html', user=user)
+        try:
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute('UPDATE user SET bio = ? WHERE id = ?', (bio, current_user.id))
+            conn.commit()
+            conn.close()
+            flash('프로필이 업데이트되었습니다.', 'success')
+            return redirect(url_for('my_profile'))
+        except Exception as e:
+            flash(f'프로필 업데이트 중 오류가 발생했습니다: {str(e)}', 'error')
+            return redirect(url_for('edit_profile'))
+    
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM user WHERE id = ?', (current_user.id,))
+        user = cursor.fetchone()
+        conn.close()
+        return render_template('edit_profile.html', user=user)
+    except Exception as e:
+        flash(f'프로필 로드 중 오류가 발생했습니다: {str(e)}', 'error')
+        return redirect(url_for('dashboard'))
 
 # 사용자 프로필 페이지
 @app.route('/profile/<user_id>')
@@ -250,6 +281,12 @@ def profile(user_id):
     products = cursor.fetchall()
     
     return render_template('profile.html', user=user, products=products)
+
+# 현재 사용자의 프로필 페이지
+@app.route('/my_profile')
+@login_required
+def my_profile():
+    return redirect(url_for('profile', user_id=current_user.id))
 
 # 상품 등록
 @app.route('/product/new', methods=['GET', 'POST'])
@@ -299,10 +336,8 @@ def view_product(product_id):
 
 # 상품 수정
 @app.route('/product/<product_id>/edit', methods=['GET', 'POST'])
+@login_required
 def edit_product(product_id):
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    
     db = get_db()
     cursor = db.cursor()
     
@@ -315,7 +350,7 @@ def edit_product(product_id):
         return redirect(url_for('dashboard'))
     
     # 판매자만 수정 가능
-    if product['seller_id'] != session['user_id']:
+    if product['seller_id'] != current_user.id:
         flash('상품을 수정할 권한이 없습니다.')
         return redirect(url_for('dashboard'))
     
@@ -354,22 +389,37 @@ def edit_product(product_id):
 
 # 신고하기
 @app.route('/report', methods=['GET', 'POST'])
+@login_required
 def report():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
     if request.method == 'POST':
-        target_id = request.form['target_id']
-        reason = request.form['reason']
-        db = get_db()
-        cursor = db.cursor()
-        report_id = str(uuid.uuid4())
-        cursor.execute(
-            "INSERT INTO report (id, reporter_id, target_id, reason) VALUES (?, ?, ?, ?)",
-            (report_id, session['user_id'], target_id, reason)
-        )
-        db.commit()
-        flash('신고가 접수되었습니다.')
-        return redirect(url_for('dashboard'))
+        report_type = request.form.get('report_type')
+        content = request.form.get('content')
+        product_id = request.form.get('product_id')
+        
+        if not report_type or not content:
+            flash('신고 유형과 내용을 모두 입력해주세요.', 'error')
+            return redirect(url_for('report'))
+            
+        try:
+            conn = get_db()
+            cursor = conn.cursor()
+            
+            # 신고 내용 저장
+            cursor.execute('''
+                INSERT INTO report (user_id, report_type, content, product_id, status)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (current_user.id, report_type, content, product_id, 'pending'))
+            
+            conn.commit()
+            conn.close()
+            
+            flash('신고가 접수되었습니다.', 'success')
+            return redirect(url_for('dashboard'))
+            
+        except Exception as e:
+            flash(f'신고 접수 중 오류가 발생했습니다: {str(e)}', 'error')
+            return redirect(url_for('report'))
+            
     return render_template('report.html')
 
 # 상품 삭제
@@ -445,42 +495,49 @@ def change_password():
     flash('비밀번호가 성공적으로 변경되었습니다.', 'success')
     return redirect(url_for('edit_profile'))
 
-def reset_user_passwords():
-    with app.app_context():
-        db = get_db()
-        cursor = db.cursor()
-        # 모든 사용자의 비밀번호를 'password123'으로 초기화
-        default_password = generate_password_hash('password123')
-        cursor.execute("UPDATE user SET password = ?", (default_password,))
-        db.commit()
-        print("모든 사용자의 비밀번호가 'password123'으로 초기화되었습니다.")
-
+# 관리자 페이지
 @app.route('/admin')
 @login_required
 def admin_dashboard():
     if not current_user.is_admin:
-        flash('관리자만 접근할 수 있습니다.')
+        flash('관리자만 접근할 수 있습니다.', 'error')
         return redirect(url_for('dashboard'))
-    
-    db = get_db()
-    cursor = db.cursor()
-    
-    # 신고 목록 조회
-    cursor.execute("""
-        SELECT r.*, u1.username as reporter_name, u2.username as target_name
-        FROM report r
-        JOIN user u1 ON r.reporter_id = u1.id
-        JOIN user u2 ON r.target_id = u2.id
-        ORDER BY r.created_at DESC
-    """)
-    reports = cursor.fetchall()
-    
-    # 사용자 목록 조회
-    cursor.execute("SELECT * FROM user ORDER BY username")
-    users = cursor.fetchall()
-    
-    return render_template('admin_dashboard.html', reports=reports, users=users)
+        
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
+        
+        # 모든 사용자 조회
+        cursor.execute('SELECT * FROM user')
+        users = cursor.fetchall()
+        
+        # 모든 신고 조회 (신고자 정보 포함)
+        cursor.execute('''
+            SELECT r.*, u.username as reporter_name
+            FROM report r
+            JOIN user u ON r.user_id = u.id
+            ORDER BY r.created_at DESC
+        ''')
+        reports = cursor.fetchall()
+        
+        # 모든 상품 조회 (판매자 정보 포함)
+        cursor.execute('''
+            SELECT p.*, u.username as seller_name
+            FROM product p
+            JOIN user u ON p.seller_id = u.id
+            ORDER BY p.title
+        ''')
+        products = cursor.fetchall()
+        
+        conn.close()
+        
+        return render_template('admin.html', users=users, reports=reports, products=products)
+        
+    except Exception as e:
+        flash(f'관리자 페이지 로드 중 오류가 발생했습니다: {str(e)}', 'error')
+        return redirect(url_for('dashboard'))
 
+# 사용자 차단 기능
 @app.route('/admin/ban_user', methods=['POST'])
 @login_required
 def ban_user():
@@ -488,22 +545,48 @@ def ban_user():
         flash('관리자만 접근할 수 있습니다.')
         return redirect(url_for('dashboard'))
     
-    user_id = request.form.get('user_id')
-    ban_days = int(request.form.get('ban_days', 0))
+    try:
+        user_id = request.form.get('user_id')
+        if not user_id:
+            flash('사용자 ID가 필요합니다.')
+            return redirect(url_for('admin_dashboard'))
+        
+        db = get_db()
+        cursor = db.cursor()
+        
+        # 대상 사용자 확인
+        cursor.execute("SELECT * FROM user WHERE id = ?", (user_id,))
+        target_user = cursor.fetchone()
+        
+        if not target_user:
+            flash('사용자를 찾을 수 없습니다.')
+            return redirect(url_for('admin_dashboard'))
+            
+        # 관리자 계정은 차단 불가
+        if target_user['is_admin']:
+            flash('관리자 계정은 차단할 수 없습니다.')
+            return redirect(url_for('admin_dashboard'))
+            
+        ban_days = int(request.form.get('days', 7))  # 기본 7일
+        if ban_days < 1 or ban_days > 30:
+            flash('차단 기간은 1일에서 30일 사이여야 합니다.')
+            return redirect(url_for('admin_dashboard'))
+        
+        # 차단 설정
+        cursor.execute("""
+            UPDATE user 
+            SET is_banned = 1, ban_duration = ? 
+            WHERE id = ? AND is_admin = 0
+        """, (ban_days, user_id))
+        
+        db.commit()
+        flash('사용자가 차단되었습니다.')
+    except Exception as e:
+        flash(f'오류가 발생했습니다: {str(e)}')
     
-    if ban_days == -1:  # 영구 정지
-        ban_until = '9999-12-31'
-    else:
-        ban_until = (datetime.now() + timedelta(days=ban_days)).isoformat()
-    
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("UPDATE user SET ban_until = ? WHERE id = ?", (ban_until, user_id))
-    db.commit()
-    
-    flash('사용자가 정지되었습니다.')
     return redirect(url_for('admin_dashboard'))
 
+# 사용자 차단 해제
 @app.route('/admin/unban_user', methods=['POST'])
 @login_required
 def unban_user():
@@ -511,16 +594,55 @@ def unban_user():
         flash('관리자만 접근할 수 있습니다.')
         return redirect(url_for('dashboard'))
     
-    user_id = request.form.get('user_id')
+    try:
+        user_id = request.form.get('user_id')
+        if not user_id:
+            flash('사용자 ID가 필요합니다.')
+            return redirect(url_for('admin_dashboard'))
+        
+        db = get_db()
+        cursor = db.cursor()
+        
+        cursor.execute("""
+            UPDATE user 
+            SET is_banned = 0, ban_duration = 0 
+            WHERE id = ?
+        """, (user_id,))
+        
+        db.commit()
+        flash('사용자 차단이 해제되었습니다.')
+    except Exception as e:
+        flash(f'오류가 발생했습니다: {str(e)}')
     
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("UPDATE user SET ban_until = NULL WHERE id = ?", (user_id,))
-    db.commit()
-    
-    flash('사용자 정지가 해제되었습니다.')
     return redirect(url_for('admin_dashboard'))
 
+# 관리자 계정의 차단 해제
+@app.route('/admin/fix_admin_ban')
+@login_required
+def fix_admin_ban():
+    if not current_user.is_admin:
+        flash('관리자만 접근할 수 있습니다.')
+        return redirect(url_for('dashboard'))
+    
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        
+        # 모든 관리자 계정의 차단 해제
+        cursor.execute("""
+            UPDATE user 
+            SET ban_until = NULL 
+            WHERE is_admin = 1
+        """)
+        
+        db.commit()
+        flash('모든 관리자 계정의 차단이 해제되었습니다.')
+    except Exception as e:
+        flash(f'오류가 발생했습니다: {str(e)}')
+    
+    return redirect(url_for('admin_dashboard'))
+
+# 신고 상태 업데이트
 @app.route('/admin/update_report_status', methods=['POST'])
 @login_required
 def update_report_status():
@@ -528,18 +650,93 @@ def update_report_status():
         flash('관리자만 접근할 수 있습니다.')
         return redirect(url_for('dashboard'))
     
-    report_id = request.form.get('report_id')
-    status = request.form.get('status')
+    try:
+        report_id = request.form.get('report_id')
+        status = request.form.get('status')
+        
+        if not report_id or not status:
+            flash('신고 ID와 상태가 필요합니다.')
+            return redirect(url_for('admin_dashboard'))
+        
+        if status not in ['pending', 'approved', 'rejected']:
+            flash('유효하지 않은 상태입니다.')
+            return redirect(url_for('admin_dashboard'))
+        
+        db = get_db()
+        cursor = db.cursor()
+        
+        cursor.execute("""
+            UPDATE report 
+            SET status = ? 
+            WHERE id = ?
+        """, (status, report_id))
+        
+        db.commit()
+        flash('신고 상태가 업데이트되었습니다.')
+    except Exception as e:
+        flash(f'오류가 발생했습니다: {str(e)}')
     
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("UPDATE report SET status = ? WHERE id = ?", (status, report_id))
-    db.commit()
+    return redirect(url_for('admin_dashboard'))
+
+# 관리자용 상품 삭제
+@app.route('/admin/delete_product', methods=['POST'])
+@login_required
+def admin_delete_product():
+    if not current_user.is_admin:
+        flash('관리자만 접근할 수 있습니다.')
+        return redirect(url_for('dashboard'))
     
-    flash('신고 상태가 업데이트되었습니다.')
+    try:
+        product_id = request.form.get('product_id')
+        if not product_id:
+            flash('상품 ID가 필요합니다.')
+            return redirect(url_for('admin_dashboard'))
+        
+        db = get_db()
+        cursor = db.cursor()
+        
+        # 상품 정보 조회
+        cursor.execute("SELECT * FROM product WHERE id = ?", (product_id,))
+        product = cursor.fetchone()
+        
+        if not product:
+            flash('상품을 찾을 수 없습니다.')
+            return redirect(url_for('admin_dashboard'))
+        
+        # 이미지 파일 삭제
+        if product['image_path']:
+            try:
+                os.remove(os.path.join('static', product['image_path']))
+            except:
+                pass
+        
+        # 상품 삭제
+        cursor.execute("DELETE FROM product WHERE id = ?", (product_id,))
+        db.commit()
+        
+        flash('상품이 삭제되었습니다.')
+    except Exception as e:
+        flash(f'오류가 발생했습니다: {str(e)}')
+    
     return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
-    init_db()  # 앱 컨텍스트 내에서 테이블 생성
-    reset_user_passwords()  # 비밀번호 초기화
+    with app.app_context():
+        init_db()  # 데이터베이스 초기화
+        # 관리자 계정 생성
+        try:
+            conn = get_db()
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM user WHERE username = 'admin'")
+            admin = cursor.fetchone()
+            if not admin:
+                hashed_password = generate_password_hash('1234')
+                cursor.execute("""
+                    INSERT INTO user (id, username, password, email, is_admin)
+                    VALUES (?, ?, ?, ?, ?)
+                """, (str(uuid.uuid4()), 'admin', hashed_password, 'admin@example.com', 1))
+                conn.commit()
+            conn.close()
+        except Exception as e:
+            print(f"관리자 계정 생성 중 오류 발생: {str(e)}")
     socketio.run(app, debug=True)
