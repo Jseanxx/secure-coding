@@ -162,7 +162,13 @@ GameAnalysis/
   </thead>
   <tbody>
     <tr>
-      <td>Client & Core</td>
+      <td>분석 도구</td>
+      <td>
+        <img src="https://img.shields.io/badge/dnSpy-000000?style=flat&logo=dnspy&logoColor=white"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Anti-Cheat Client</td>
       <td>
         <img src="https://img.shields.io/badge/C%23-239120?style=flat&logo=c-sharp&logoColor=white"/>
         <img src="https://img.shields.io/badge/.NET%208-512BD4?style=flat&logo=.net&logoColor=white"/>
@@ -171,7 +177,7 @@ GameAnalysis/
       </td>
     </tr>
     <tr>
-      <td>Server & Backend</td>
+      <td>Anti-Cheat Server</td>
       <td>
         <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white"/>
         <img src="https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white"/>
@@ -180,11 +186,20 @@ GameAnalysis/
       </td>
     </tr>
     <tr>
-      <td>Frontend & Web</td>
+      <td>Dashboard</td>
       <td>
         <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white"/>
         <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
         <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Infrastructure & Cloud</td>
+      <td>
+        <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
+        <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
       </td>
     </tr>
     <tr>
@@ -195,15 +210,6 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/SHA256-000000?style=flat&logo=sha256&logoColor=white"/>
         <img src="https://img.shields.io/badge/YARA-000000?style=flat&logo=yara&logoColor=white"/>
         <img src="https://img.shields.io/badge/Harmony-000000?style=flat&logo=harmony&logoColor=white"/>
-      </td>
-    </tr>
-    <tr>
-      <td>Infrastructure & Cloud</td>
-      <td>
-        <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
-        <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
       </td>
     </tr>
   </tbody>
