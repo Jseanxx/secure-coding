@@ -180,7 +180,7 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/.NET%208-512BD4?style=flat&logo=.net&logoColor=white"/>
         <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=flat&logo=c%2B%2B&logoColor=white"/>
         <img src="https://img.shields.io/badge/Windows%20Forms-0078D4?style=flat&logo=windows&logoColor=white"/>
-        <img src="https://img.shields.io/badge/SharpMonoInjector-000000?style=flat&logo=sharpmonoinjector&logoColor=white"/>
+                 <img src="https://img.shields.io/badge/SharpMonoInjector-8A2BE2?style=flat&logo=sharpmonoinjector&logoColor=white"/>
       </td>
     </tr>
     <tr>
@@ -191,7 +191,7 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/Uvicorn-059669?style=flat&logo=uvicorn&logoColor=white"/>
         <img src="https://img.shields.io/badge/Nginx-009639?style=flat&logo=nginx&logoColor=white"/>
         <img src="https://img.shields.io/badge/Pydantic-920000?style=flat&logo=pydantic&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Cryptography-000000?style=flat&logo=cryptography&logoColor=white"/>
+                 <img src="https://img.shields.io/badge/Cryptography-2F4F4F?style=flat&logo=cryptography&logoColor=white"/>
       </td>
     </tr>
          <tr>
@@ -224,9 +224,15 @@ GameAnalysis/
   </tbody>
 </table>
 
-## 🌐 Live Dashboard
-**[대시보드 바로가기](https://ghb.r-e.kr)**
+## 🚀 설치 및 실행
+
+### 🌐 대시보드
 *관리자 계정: admin / 1234*
 
+---
+
+### 🙏 Special Thanks
+- **PM, PL**: 프로젝트 지도 및 멘토링
+- **소연님**: 아낌없는 지원
 
 **화이트햇 스쿨 3기 (WHS3) 팀프로젝트**
