@@ -18,11 +18,11 @@
 - **프로젝트명**: GameAnalysis (게임해체분석기)
 - **프로젝트 기간**: 2025.05.01 ~ 2025.08.02
 - **프로젝트 형태**: 화이트햇 스쿨 3기 팀 프로젝트
-- **주요 타겟**: <img src="https://img.shields.io/badge/Unity-000000?style=flat&logo=unity&logoColor=white" height="16"/> Lethal Company - 1인칭 4인 협동 공포 서바이벌 게임
+- **주요 타겟**: <img src="https://img.shields.io/badge/Unity-000000?style=flat&logo=unity&logoColor=white" height="18"/> Lethal Company - 1인칭 4인 협동 공포 서바이벌 게임
 - **목표**: 
   1. **게임 구조 분석**: Lethal Company 게임의 리버스엔지니어링을 통한 게임 구조 분석
-  2. **핵 분석 및 제작**: 실제 핵 제작 및 학습
-  3. **안티치트 시스템 개발**: 종합적인 안티치트 시스템 개발
+  2. **핵 분석 및 제작**: 실제 쓰이고 있는 핵을 분석하고 학습 목적으로 핵 제작
+  3. **안티치트 시스템 개발**: 제작을 통해 학습한 지식을 기반으로 종합적인 안티치트 시스템 개발
 
 ## 👥 팀 소개
 
