@@ -162,27 +162,48 @@ GameAnalysis/
   </thead>
   <tbody>
     <tr>
-      <td>Backend & Core</td>
+      <td>Client & Core</td>
       <td>
         <img src="https://img.shields.io/badge/C%23-239120?style=flat&logo=c-sharp&logoColor=white"/>
-        <img src="https://img.shields.io/badge/.NET-512BD4?style=flat&logo=.net&logoColor=white"/>
+        <img src="https://img.shields.io/badge/.NET%208-512BD4?style=flat&logo=.net&logoColor=white"/>
         <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=flat&logo=c%2B%2B&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white"/>
-      </td>
-    </tr>
-    <tr>
-      <td>Libraries & Frameworks</td>
-      <td>
         <img src="https://img.shields.io/badge/Windows%20Forms-0078D4?style=flat&logo=windows&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Harmony-000000?style=flat&logo=harmony&logoColor=white"/>
-        <img src="https://img.shields.io/badge/YARA-000000?style=flat&logo=yara&logoColor=white"/>
       </td>
     </tr>
     <tr>
-      <td>Security & Monitoring</td>
+      <td>Server & Backend</td>
+      <td>
+        <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white"/>
+        <img src="https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Uvicorn-059669?style=flat&logo=uvicorn&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Nginx-009639?style=flat&logo=nginx&logoColor=white"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Frontend & Web</td>
+      <td>
+        <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white"/>
+        <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
+        <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Security & Libraries</td>
       <td>
         <img src="https://img.shields.io/badge/RSA-000000?style=flat&logo=rsa&logoColor=white"/>
-        <img src="https://img.shields.io/badge/HWID-000000?style=flat&logo=hwid&logoColor=white"/>
+        <img src="https://img.shields.io/badge/AES-000000?style=flat&logo=aes&logoColor=white"/>
+        <img src="https://img.shields.io/badge/SHA256-000000?style=flat&logo=sha256&logoColor=white"/>
+        <img src="https://img.shields.io/badge/YARA-000000?style=flat&logo=yara&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Harmony-000000?style=flat&logo=harmony&logoColor=white"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Infrastructure & Cloud</td>
+      <td>
+        <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
+        <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
       </td>
     </tr>
   </tbody>
