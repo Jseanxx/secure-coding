@@ -36,7 +36,7 @@
 | **장준우** | Reflection-based IL Code Verification, AppDomain Integrity Check |
 | **남기찬** | Behavior-based Detection |
 | **이서준** | DLL Injection Detection, Harmony Patch Detection |
-| **황성하** | YARA-based Process Watcher, Heartbeat Monitoring |
+| **황성하** | YARA-based Process Watcher, Heartbeat |
 
 ### 🤝 협업 방식
 - **GitHub**: 코드 버전 관리 및 협업
@@ -233,6 +233,6 @@ GameAnalysis/
 ---
 
 ### 🙏 Support
-- **PM, PL**: 프로젝트 지도 및 멘토링
-
+- ** PM, PL **: 프로젝트 지도 및 멘토링
+- ** MaxMinY
 **화이트햇 스쿨 3기 (WHS3) 팀프로젝트**
