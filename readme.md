@@ -207,6 +207,7 @@ GameAnalysis/
        <td>
          <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
          <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
+         <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
          <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
        </td>
      </tr>
@@ -216,7 +217,6 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/RSA-000000?style=flat&logo=rsa&logoColor=white"/>
         <img src="https://img.shields.io/badge/AES-000000?style=flat&logo=aes&logoColor=white"/>
         <img src="https://img.shields.io/badge/SHA256-000000?style=flat&logo=sha256&logoColor=white"/>
-        <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
         <img src="https://img.shields.io/badge/YARA-000000?style=flat&logo=yara&logoColor=white"/>
         <img src="https://img.shields.io/badge/Harmony-000000?style=flat&logo=harmony&logoColor=white"/>
       </td>
