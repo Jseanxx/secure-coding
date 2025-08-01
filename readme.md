@@ -224,9 +224,7 @@ GameAnalysis/
   </tbody>
 </table>
 
-## 🚀 설치 및 실행
-
-### 🌐 Live Dashboard
+## 🌐 Live Dashboard
 **[대시보드 바로가기](https://ghb.r-e.kr)**
 *관리자 계정: admin / 1234*
 
