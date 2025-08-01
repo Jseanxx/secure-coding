@@ -26,7 +26,7 @@
 
 ## 📊 개발 활동
 
-![GitHub Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Jihoon&repo=Client_Lethal_Anti_Cheat&theme=react-dark)
+![Repository Stats](https://github-readme-stats.vercel.app/api/pin/?username=Jihoon&repo=Client_Lethal_Anti_Cheat&theme=radical)
 
 ## 👥 팀 소개
 
