@@ -147,7 +147,7 @@ GameAnalysis/
 - **Process Watcher**: 프로세스 모니터링 및 감시
 - **Behavior-based Detection**: 행동 기반 탐지 시스템
 - **Client-Server Heartbeat**: 실시간 클라이언트 상태 모니터링
-- **Integrity Check**: 핵심 DLL,exe 파일들 해시기반 무결성 검사
+- **Integrity Check**: 핵심 DLL,exe 파일들 해시기반 서버사이드 무결성 검사
 - **Admin Dashboard Monitoring**: 관리자 웹 대시보드를 통한 실시간 로그 모니터링
 
 ### 🔍 Advanced Detection
