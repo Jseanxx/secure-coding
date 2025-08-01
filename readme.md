@@ -207,7 +207,7 @@ GameAnalysis/
        <td>
          <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
          <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
-         <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
+                   <img src="https://img.shields.io/badge/HTTPS-009639?style=flat&logo=https&logoColor=white"/>
          <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
        </td>
      </tr>
