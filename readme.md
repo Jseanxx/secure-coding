@@ -161,14 +161,15 @@ GameAnalysis/
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>분석 도구</td>
-      <td>
-        <img src="https://img.shields.io/badge/dnSpy-000000?style=flat&logo=dnspy&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Cheat%20Engine-000000?style=flat&logo=cheatengine&logoColor=white"/>
-        <img src="https://img.shields.io/badge/x64dbg-000000?style=flat&logo=x64dbg&logoColor=white"/>
-      </td>
-    </tr>
+         <tr>
+       <td>Analysis Tools</td>
+       <td>
+         <img src="https://img.shields.io/badge/dnSpy-000000?style=flat&logo=dnspy&logoColor=white"/>
+         <img src="https://img.shields.io/badge/Cheat%20Engine-000000?style=flat&logo=cheatengine&logoColor=white"/>
+         <img src="https://img.shields.io/badge/x64dbg-000000?style=flat&logo=x64dbg&logoColor=white"/>
+         <img src="https://img.shields.io/badge/IDA-000000?style=flat&logo=ida&logoColor=white"/>
+       </td>
+     </tr>
     <tr>
       <td>Anti-Cheat Client</td>
       <td>
@@ -190,25 +191,22 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/Cryptography-000000?style=flat&logo=cryptography&logoColor=white"/>
       </td>
     </tr>
-    <tr>
-      <td>Web</td>
-      <td>
-        <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white"/>
-        <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white"/>
-        <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
-        <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
-      </td>
-    </tr>
-    <tr>
-      <td>Infrastructure & Cloud</td>
-      <td>
-        <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
-        <img src="https://img.shields.io/badge/SSH-000000?style=flat&logo=ssh&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Firewall-000000?style=flat&logo=firewall&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
-      </td>
-    </tr>
+         <tr>
+       <td>Web</td>
+       <td>
+         <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white"/>
+         <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
+         <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
+       </td>
+     </tr>
+         <tr>
+       <td>Infrastructure & Cloud</td>
+       <td>
+         <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
+         <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
+         <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
+       </td>
+     </tr>
     <tr>
       <td>Security & Libraries</td>
       <td>
