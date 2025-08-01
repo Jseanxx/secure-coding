@@ -165,6 +165,8 @@ GameAnalysis/
       <td>분석 도구</td>
       <td>
         <img src="https://img.shields.io/badge/dnSpy-000000?style=flat&logo=dnspy&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Cheat%20Engine-000000?style=flat&logo=cheatengine&logoColor=white"/>
+        <img src="https://img.shields.io/badge/x64dbg-000000?style=flat&logo=x64dbg&logoColor=white"/>
       </td>
     </tr>
     <tr>
@@ -174,6 +176,7 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/.NET%208-512BD4?style=flat&logo=.net&logoColor=white"/>
         <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=flat&logo=c%2B%2B&logoColor=white"/>
         <img src="https://img.shields.io/badge/Windows%20Forms-0078D4?style=flat&logo=windows&logoColor=white"/>
+        <img src="https://img.shields.io/badge/SharpMonoInjector-000000?style=flat&logo=sharpmonoinjector&logoColor=white"/>
       </td>
     </tr>
     <tr>
@@ -183,12 +186,15 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white"/>
         <img src="https://img.shields.io/badge/Uvicorn-059669?style=flat&logo=uvicorn&logoColor=white"/>
         <img src="https://img.shields.io/badge/Nginx-009639?style=flat&logo=nginx&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Pydantic-920000?style=flat&logo=pydantic&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Cryptography-000000?style=flat&logo=cryptography&logoColor=white"/>
       </td>
     </tr>
     <tr>
-      <td>Dashboard</td>
+      <td>Web</td>
       <td>
         <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white"/>
+        <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white"/>
         <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
         <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
       </td>
@@ -198,7 +204,8 @@ GameAnalysis/
       <td>
         <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=flat&logo=googlecloud&logoColor=white"/>
         <img src="https://img.shields.io/badge/Ubuntu-E95420?style=flat&logo=ubuntu&logoColor=white"/>
-        <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
+        <img src="https://img.shields.io/badge/SSH-000000?style=flat&logo=ssh&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Firewall-000000?style=flat&logo=firewall&logoColor=white"/>
         <img src="https://img.shields.io/badge/Let's%20Encrypt-003A70?style=flat&logo=letsencrypt&logoColor=white"/>
       </td>
     </tr>
@@ -208,6 +215,7 @@ GameAnalysis/
         <img src="https://img.shields.io/badge/RSA-000000?style=flat&logo=rsa&logoColor=white"/>
         <img src="https://img.shields.io/badge/AES-000000?style=flat&logo=aes&logoColor=white"/>
         <img src="https://img.shields.io/badge/SHA256-000000?style=flat&logo=sha256&logoColor=white"/>
+        <img src="https://img.shields.io/badge/HTTPS-000000?style=flat&logo=https&logoColor=white"/>
         <img src="https://img.shields.io/badge/YARA-000000?style=flat&logo=yara&logoColor=white"/>
         <img src="https://img.shields.io/badge/Harmony-000000?style=flat&logo=harmony&logoColor=white"/>
       </td>
