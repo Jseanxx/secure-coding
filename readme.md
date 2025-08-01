@@ -225,7 +225,7 @@ GameAnalysis/
 </table>
 
 ## 🌐 대시보드
-
+<img width="2560" height="1600" alt="image" src="https://github.com/user-attachments/assets/e89cfe6d-900d-42c8-a81e-c3d863e3bad9" />
 **[대시보드 바로가기](https://ghb.r-e.kr)**
 
 *관리자 계정: admin / 1234*
