@@ -138,6 +138,7 @@ GameAnalysis/
 ```
 
 ## ⚡ 주요 기능
+<img width="900" height="611" alt="image" src="https://github.com/user-attachments/assets/692714e1-fa12-4eb6-9fce-9d86ebf67b70" />
 
 ### 🛡️ Anti-Cheat Core Features
 - **Anti-Debugging**: 디버거 탐지 및 방지
