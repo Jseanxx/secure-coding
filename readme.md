@@ -24,9 +24,6 @@
   2. **핵 분석 및 제작**: 실제 쓰이고 있는 핵을 분석하고 학습 목적으로 핵 제작
   3. **안티치트 시스템 개발**: 제작을 통해 학습한 지식을 기반으로 종합적인 안티치트 시스템 개발
 
-## 📊 개발 활동
-
-![Repository Stats](https://github-readme-stats.vercel.app/api/pin/?username=Jihoon&repo=Client_Lethal_Anti_Cheat&theme=radical)
 
 ## 👥 팀 소개
 
