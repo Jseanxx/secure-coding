@@ -2,7 +2,8 @@
   <h1>🎮 GameAnalysis</h1>
   <p1>게임과 핵을 분석하여 안티치트를 제작하는 TEAM 게임해체분석기</p1>
 </div>
-<img width="1267" height="1156" alt="image" src="https://github.com/user-attachments/assets/89e8e088-e82a-4a04-b773-d2dd46c75acb" />
+
+<img width="500" height="456" alt="logo4" src="https://github.com/user-attachments/assets/ff5b76af-2c8c-4489-a15f-e4447f41aca6" />
 
 
 ## 📋 프로젝트 개요
