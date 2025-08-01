@@ -190,14 +190,14 @@ GameAnalysis/
                  <img src="https://img.shields.io/badge/Cryptography-2F4F4F?style=flat&logo=cryptography&logoColor=white"/>
       </td>
     </tr>
-         <tr>
-       <td>Web</td>
-       <td>
-         <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white"/>
-         <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
-         <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
-       </td>
-     </tr>
+                   <tr>
+        <td>Dashboard</td>
+        <td>
+          <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white"/>
+          <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black"/>
+          <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss&logoColor=white"/>
+        </td>
+      </tr>
          <tr>
        <td>Infrastructure & Cloud</td>
        <td>
@@ -227,5 +227,7 @@ GameAnalysis/
 
 ---
 
+### 🙏 Support
+- **PM, PL**: 프로젝트 지도 및 멘토링
 
 **화이트햇 스쿨 3기 (WHS3) 팀프로젝트**
