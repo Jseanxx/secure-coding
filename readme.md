@@ -3,48 +3,28 @@
   <p1>게임과 핵을 분석하여 안티치트를 제작하는 게임해체분석기</p1>
 </div>
 
-# 
-
 ## 📋 프로젝트 개요
-<img width="120" height="120" alt="겜해분 로고3" src="https://github.com/user-attachments/assets/cdbeb9f6-5c94-4a98-8567-d611797f1ef9" />
 
-**게임해체분석기**는 화이트햇 스쿨 3기 팀 프로젝트에서 게임보안을 주제로 결성된 팀입니다.
+<img width="120" height="120" alt="겜해분 로고3" src="https://github.com/user-attachments/assets/cdbeb9f6-5c94-4a98-8567-d6117971fef9" />
 
+**게임해체분석기**는 화이트햇 스쿨 3기 팀 프로젝트에서 게임보안을 주제로 결성된 팀입니다. **Lethal Company** 게임을 대상으로 리버스엔지니어링을 통한 게임 구조 분석, 실제 핵 제작 및 학습, 그리고 안티치트 시스템 개발을 목표로 합니다.
 
-### 🎯 분석 대상 게임
+**프로젝트 기간**: 2024년 5월 1일(목) ~ 8월 2일(토)
+
+## 🎯 분석 대상 게임
+
 **Lethal Company** - Unity 기반 멀티플레이어 서바이벌 호러 게임
 <img width="600" height="256" alt="image" src="https://github.com/user-attachments/assets/4d488c9a-0f81-4b98-b459-3b90ca921a10" />
 
+## 🎯 프로젝트 목표
 
-### 📅 프로젝트 기간
-**2024년 5월 1일(목) ~ 8월 2일(토)**
-
-
-### 🎯 프로젝트 목표
 - **리버스엔지니어링**을 통한 게임 구조 및 메모리 분석
 - 게임 핵의 작동 원리 파악 및 학습을 목적으로 한 실제 핵 제작
 - 분석 결과를 바탕으로 한 **안티치트 시스템** 개발
-- 
 
-### 🌐 Live Dashboard
-**[대시보드 바로가기](https://ghb.r-e.kr)**
+## 👥 팀 소개
 
-
-*관리자 계정: admin / 1234*
-
-
-## 👥 팀 구성
-
-**8명의 팀원으로 구성된 게임보안 팀**
-
-
-### 🤝 협업 방식
-- **GitHub**: 코드 버전 관리 및 협업
-- **Discord**: 실시간 커뮤니케이션
-- **Offline/Online**: 하이브리드 미팅
-
-
-### 👨‍💻 팀원
+### 팀 구성원 및 역할
 | Name | Role |
 |------|------|
 | **이지훈** | PM, Anti-Debugging, Process Watcher, GUI Client |
@@ -56,9 +36,10 @@
 | **이서준** | DLL Injection Detection, Harmony Patch Detection |
 | **황성하** | YARA-based Process Watcher, Heartbeat Monitoring |
 
-
-
-
+### 🤝 협업 방식
+- **GitHub**: 코드 버전 관리 및 협업
+- **Discord**: 실시간 커뮤니케이션
+- **Offline/Online**: 하이브리드 미팅
 
 ## 🏗️ 프로젝트 구조
 
@@ -169,15 +150,49 @@ GameAnalysis/
 - **Harmony Patch Detection**: Harmony 패치 탐지
 - **YARA-based Process Watcher**: YARA 규칙 기반 프로세스 감시
 
+## 🛠️ 기술 스택
+
+### Backend & Core
+- **C# (.NET 8.0)**: 메인 클라이언트 및 DLL 개발
+- **C++**: 디버깅 방지 모듈
+- **Python**: 서버 및 대시보드
+
+### Libraries & Frameworks
+- **Windows Forms**: GUI 클라이언트
+- **SharpMonoInjector**: DLL 인젝션 도구
+- **Harmony**: 패치 탐지
+- **YARA**: 프로세스 감시 규칙
+
+### Security & Monitoring
+- **RSA 암호화**: 클라이언트-서버 통신 보안
+- **파일 해시 검증**: 무결성 검사
+- **HWID 기반 인증**: 하드웨어 식별
+
 ## 🚀 설치 및 실행
+
+### 🌐 Live Dashboard
+**[대시보드 바로가기](https://ghb.r-e.kr)**
+
+*관리자 계정: admin / 1234*
+
+### 📋 설치 요구사항
+- Windows 10/11
+- .NET 8.0 Runtime
+- 관리자 권한 (안티치트 실행 시)
+
+### 🔧 실행 방법
+1. 프로젝트 클론
+2. Visual Studio 2022로 솔루션 열기
+3. NuGet 패키지 복원
+4. 빌드 및 실행
 
 ## 📊 결과
 
-## 🛠️ 기술 스택
-- C++
-- C#
+*프로젝트 결과 및 성과가 여기에 추가될 예정입니다.*
 
 ## 📄 라이선스
+
+*라이선스 정보가 여기에 추가될 예정입니다.*
 
 ---
 
