@@ -38,7 +38,7 @@
 ### 🤝 협업 방식
 - **GitHub**: 코드 버전 관리 및 협업
 - **Discord**: 실시간 커뮤니케이션
-- **노션**: 분석 결과 공유 및 문서 관리
+- **Notion**: 분석 결과 공유 및 문서 관리
 - **Offline/Online**: 하이브리드 미팅
 - **매주 정기적인 스크럼 미팅**: 분석 결과 공유, 진행상황 점검 및 멘토링
 
@@ -136,7 +136,7 @@ GameAnalysis/
 
 ## ⚡ 주요 기능
 
-### 🛡️ Anti-Cheat Core Features
+### ✔ Anti-Cheat Core Features
 - **Anti-Debugging**: 디버거 탐지 및 방지
 - **Process Watcher**: 프로세스 모니터링 및 감시
 - **Behavior-based Detection**: 행동 기반 탐지 시스템
@@ -144,30 +144,49 @@ GameAnalysis/
 - **Integrity Check**: 핵심 DLL,exe 파일들 해시기반 서버사이드 무결성 검사
 - **Admin Dashboard Monitoring**: 관리자 웹 대시보드를 통한 실시간 로그 모니터링
 
-### 🛡️ Advanced Anti-Cheat Detection
+### ✔ Advanced Anti-Cheat Detection
 - **DLL Injection Detection**: DLL 인젝션 탐지
 - **Reflection-based IL Code Verification**: IL 코드 검증
 - **AppDomain Integrity Check**: AppDomain 무결성 검사
 - **Harmony Patch Detection**: Harmony 패치 탐지
 - **YARA-based Process Watcher**: YARA 규칙 기반 프로세스 감시
 
-## 🛠️ 기술 스택
+## ⚙️ 기술 스택
 
-### Backend & Core
-- **C# (.NET 8.0)**: 메인 클라이언트 및 DLL 개발
-- **C++**: 디버깅 방지 모듈
-- **Python**: 서버 및 대시보드
-
-### Libraries & Frameworks
-- **Windows Forms**: GUI 클라이언트
-- **SharpMonoInjector**: DLL 인젝션 도구
-- **Harmony**: 패치 탐지
-- **YARA**: 프로세스 감시 규칙
-
-### Security & Monitoring
-- **RSA 암호화**: 클라이언트-서버 통신 보안
-- **파일 해시 검증**: 무결성 검사
-- **HWID 기반 인증**: 하드웨어 식별
+<table>
+  <thead>
+    <tr>
+      <th>분류</th>
+      <th>기술 스택</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Backend & Core</td>
+      <td>
+        <img src="https://img.shields.io/badge/C%23-239120?style=flat&logo=c-sharp&logoColor=white"/>
+        <img src="https://img.shields.io/badge/.NET-512BD4?style=flat&logo=.net&logoColor=white"/>
+        <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=flat&logo=c%2B%2B&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Libraries & Frameworks</td>
+      <td>
+        <img src="https://img.shields.io/badge/Windows%20Forms-0078D4?style=flat&logo=windows&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Harmony-000000?style=flat&logo=harmony&logoColor=white"/>
+        <img src="https://img.shields.io/badge/YARA-000000?style=flat&logo=yara&logoColor=white"/>
+      </td>
+    </tr>
+    <tr>
+      <td>Security & Monitoring</td>
+      <td>
+        <img src="https://img.shields.io/badge/RSA-000000?style=flat&logo=rsa&logoColor=white"/>
+        <img src="https://img.shields.io/badge/HWID-000000?style=flat&logo=hwid&logoColor=white"/>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## 🚀 설치 및 실행
 
@@ -189,11 +208,7 @@ GameAnalysis/
 
 ## 📊 결과
 
-*프로젝트 결과 및 성과가 여기에 추가될 예정입니다.*
-
 ## 📄 라이선스
-
-*라이선스 정보가 여기에 추가될 예정입니다.*
 
 ---
 
