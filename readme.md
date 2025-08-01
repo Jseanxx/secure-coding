@@ -16,10 +16,10 @@
 ## ✍️ 프로젝트 개요
 
 - **프로젝트명**: GameAnalysis (게임해체분석기)
-- **프로젝트 기간**: 2024.05.01 ~ 2024.08.02
+- **프로젝트 기간**: 2025.05.01 ~ 2025.08.02
 - **프로젝트 형태**: 화이트햇 스쿨 3기 팀 프로젝트
-- **주요 타겟**: Lethal Company - 4인 공포 호러 서바이벌 게임
-- **목표**: Lethal Company 게임의 리버스엔지니어링을 통한 게임 구조 분석, 실제 핵 제작 및 학습, 안티치트 시스템 개발
+- **주요 타겟**: Lethal Company - 1인칭 4인 협동 공포 서바이벌 게임
+- **목표**: Lethal Company 게임의 리버스엔지니어링을 통한 게임 구조 분석, 핵 분석 및 제작, 안티치트 시스템 개발
 
 ## 👥 팀 소개
 
@@ -40,9 +40,9 @@
 - **Discord**: 실시간 커뮤니케이션
 - **Offline/Online**: 하이브리드 미팅
 
-## 🏗️ 프로젝트 구조
+## 📁 프로젝트 구조
 
-### 🔄 시스템 아키텍처
+### ⚙️ 안티치트 시스템 아키텍처
 <img width="1811" height="716" alt="image" src="https://github.com/user-attachments/assets/f6735d5a-a779-43ea-b9e5-80496ea12444" />
 
 ### 📁 폴더 구조
@@ -132,9 +132,9 @@ GameAnalysis/
 
 ```
 
-## 🔧 주요 기능
+## ⚡ 주요 기능
 
-### 🛡️ Anti-Cheat Core Features
+### ✔ Anti-Cheat Core Features
 - **Anti-Debugging**: 디버거 탐지 및 방지
 - **Process Watcher**: 프로세스 모니터링 및 감시
 - **Behavior-based Detection**: 행동 기반 탐지 시스템
@@ -142,7 +142,7 @@ GameAnalysis/
 - **Integrity Check**: 핵심 DLL,exe 파일들 해시기반 서버사이드 무결성 검사
 - **Admin Dashboard Monitoring**: 관리자 웹 대시보드를 통한 실시간 로그 모니터링
 
-### 🔍 Advanced Detection
+### ✔ Advanced Anti-Cheat Detection
 - **DLL Injection Detection**: DLL 인젝션 탐지
 - **Reflection-based IL Code Verification**: IL 코드 검증
 - **AppDomain Integrity Check**: AppDomain 무결성 검사
