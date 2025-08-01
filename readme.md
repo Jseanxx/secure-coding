@@ -63,8 +63,6 @@ GameAnalysis/
 │   │   ├── MainForm.cs                    # 메인 폼
 │   │   │   ├── MainForm.Designer.cs
 │   │   │   └── MainForm.resx
-│   │   ├── UI/                            # 콘솔 UI 처리
-│   │   │   └── ConsoleRefresher.cs
 │   │   ├── Resources/                     # 외부 라이브러리
 │   │   │   └── SharpMonoInjector.dll      # DLL 인젝션 도구
 │   │   ├── Integrity/                     # 무결성 검사 모듈
@@ -72,21 +70,16 @@ GameAnalysis/
 │   │   │   ├── IntegrityChecker.cs
 │   │   │   ├── IntegrityResult.cs
 │   │   │   └── ServerHashManager.cs
-│   │   ├── Util/                          # 유틸 및 보조 관리
-│   │   │   ├── BehaviorLogManager.cs
-│   │   │   ├── HeartbeatManager.cs
-│   │   │   ├── HwidUtil.cs
-│   │   │   ├── InjectorManager.cs
-│   │   │   ├── LogManager.cs
-│   │   │   ├── PipeListener.cs
-│   │   │   ├── RsaKey.cs
-│   │   │   ├── SecurityUtil.cs
-│   │   │   └── SimpleACManager.cs
-│   │   └── ServerConnection/             # 서버와 통신
-│   │       ├── Log collection
-│   │       ├── RSAKey
-│   │       ├── SecurityUtil.cs
-│   │       └── HeartBeatManager.cs
+│   │   └── Util/                          # 유틸 및 보조 관리
+│   │       ├── BehaviorLogManager.cs      # 서버와 통신 (로그 수집)
+│   │       ├── HeartbeatManager.cs        # 서버와 통신 (하트비트)
+│   │       ├── HwidUtil.cs
+│   │       ├── InjectorManager.cs
+│   │       ├── LogManager.cs
+│   │       ├── PipeListener.cs
+│   │       ├── RsaKey.cs                  # 서버와 통신 (암호화)
+│   │       ├── SecurityUtil.cs            # 서버와 통신 (보안)
+│   │       └── SimpleACManager.cs
 │
 │   ├── Lethal_Anti_Cheat/                 # DLL 기반 백그라운드 안티치트 (Injection DLL)
 │   │   ├── BehaviourAntiCheats/          # 게임 내 치트행위 탐지
