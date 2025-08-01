@@ -1,11 +1,12 @@
 <div align="center">
   <h1>🎮 GameAnalysis</h1>
-  <p1>게임과 핵을 분석하여 안티치트를 제작하는 게임해체분석기</p1>
+  <p1>게임과 핵을 분석하여 안티치트를 제작하는 TEAM 게임해체분석기</p1>
 </div>
+<img width="1267" height="1156" alt="image" src="https://github.com/user-attachments/assets/89e8e088-e82a-4a04-b773-d2dd46c75acb" />
+
 
 ## 📋 프로젝트 개요
 
-<img width="120" height="120" alt="겜해분 로고3" src="https://github.com/user-attachments/assets/cdbeb9f6-5c94-4a98-8567-d6117971fef9" />
 
 **게임해체분석기**는 화이트햇 스쿨 3기 팀 프로젝트에서 게임보안을 주제로 결성된 팀입니다. **Lethal Company** 게임을 대상으로 리버스엔지니어링을 통한 게임 구조 분석, 실제 핵 제작 및 학습, 그리고 안티치트 시스템 개발을 목표로 합니다.
 
@@ -44,7 +45,7 @@
 ## 🏗️ 프로젝트 구조
 
 ### 🔄 시스템 아키텍처
-<img width="2732" height="902" alt="image" src="https://github.com/user-attachments/assets/a6d50c29-c29d-4258-bd31-4f9f757441f0" />
+<img width="1811" height="716" alt="image" src="https://github.com/user-attachments/assets/f6735d5a-a779-43ea-b9e5-80496ea12444" />
 
 ### 📁 폴더 구조
 ```
