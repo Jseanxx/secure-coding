@@ -24,6 +24,10 @@
   2. **핵 분석 및 제작**: 실제 쓰이고 있는 핵을 분석하고 학습 목적으로 핵 제작
   3. **안티치트 시스템 개발**: 제작을 통해 학습한 지식을 기반으로 종합적인 안티치트 시스템 개발
 
+## 📊 개발 활동
+
+![GitHub Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=Jihoon&repo=Client_Lethal_Anti_Cheat&theme=react-dark)
+
 ## 👥 팀 소개
 
 ### 팀 구성원 및 역할
@@ -36,7 +40,7 @@
 | **장준우** | Reflection-based IL Code Verification, AppDomain Integrity Check |
 | **남기찬** | Behavior-based Detection |
 | **이서준** | DLL Injection Detection, Harmony Patch Detection |
-| **황성하** | YARA-based Process Watcher, Heartbeat |
+| **황성하** | YARA-based Process Watcher, Heartbeat Monitoring |
 
 ### 🤝 협업 방식
 - **GitHub**: 코드 버전 관리 및 협업
@@ -234,5 +238,5 @@ GameAnalysis/
 
 ### 🙏 Support
 - **PM, PL**: 프로젝트 지도 및 멘토링
-- **MaxMinY**
+
 **화이트햇 스쿨 3기 (WHS3) 팀프로젝트**
